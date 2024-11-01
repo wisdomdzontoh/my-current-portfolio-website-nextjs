@@ -29,7 +29,7 @@ export default function Contact() {
       <div className="container">
         <h2 className="section-title">Contact</h2>
         <p className="contact-description">
-          Feel free to reach out if you'd like to discuss opportunities or have any questions!
+          Feel free to reach out if you would like to discuss opportunities or have any questions!
         </p>
         <a href="mailto:wisdomdzontoh@gmail.com" className="contact-button">
           Email Me

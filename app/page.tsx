@@ -9,30 +9,8 @@ import Skills from './components/Skills'
 import Experience from './components/Experience'
 import Testimonials from './components/Testimonials'
 import Blog from './components/Blog'
-import Footer from './components/Footer'
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState('home')
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'testimonials', 'blog', 'contact']
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          return rect.top <= 100 && rect.bottom >= 100
-        }
-        return false
-      })
-      if (currentSection) {
-        setActiveSection(currentSection)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   return (
     <div className="home">
