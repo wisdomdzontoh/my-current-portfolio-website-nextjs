@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import AboutMe from './components/AboutMe'
 import Projects from './components/Projects'
@@ -11,19 +10,17 @@ import Testimonials from './components/Testimonials'
 import Blog from './components/Blog'
 
 export default function Home() {
-
   return (
     <div className="home">
-      
       <section id="home" className="hero">
         <div className="container">
           <div className="hero-content">
             <div className="hero-text">
-              <h1 className="hero-title">Welcome to My Portfolio, This is what I do</h1>
+              <h1 className="hero-title">Welcome to My Portfolio, Check me out</h1>
               <p className="hero-description">
                 I am a software Engineer with experience in web development and mobile app development. With additional background in health informatics too. 
                 I Demonstrated expertise in software engineering, innovation, and problem-solving. Committed to advancing 
-                systems and bridging the gap between technology and industries. My core programming language is Python with django as my framework.
+                systems and bridging the gap between technology and industries. My core programming language is Python with Django as my framework.
               </p>
               <div className="hero-buttons">
                 <a href="#projects" className="button primary">View Projects</a>
