@@ -19,7 +19,7 @@ export default function Home() {
         <div className="container">
           <div className="hero-content">
             <div className="hero-text">
-              <h1 className="hero-title">Welcome to My Portfolio</h1>
+              <h1 className="hero-title">Welcome to My Portfolio, This is what I do</h1>
               <p className="hero-description">
                 I am a software Engineer with experience in web development and mobile app development. With additional background in health informatics too. 
                 I Demonstrated expertise in software engineering, innovation, and problem-solving. Committed to advancing 
