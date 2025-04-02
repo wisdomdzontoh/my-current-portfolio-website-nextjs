@@ -1,10 +1,10 @@
-import About from "./components/about"
-import Contact from "./components/contact"
-import Experience from "./components/experience"
-import Hero from "./components/hero"
-import Projects from "./components/projects"
-import Skills from "./components/skills"
-import Testimonials from "./components/testimonials"
+import About from "@/app/components/about"
+import Contact from "@/app/components/contact"
+import Experience from "@/app/components/experience"
+import Hero from "@/app/components/hero"
+import Projects from "@/app/components/projects"
+import Skills from "@/app/components/skills"
+import Testimonials from "@/app/components/testimonials"
 
 export default function Home() {
   return (
