@@ -1,106 +1,124 @@
-'use client'; // Ensure this is a Client Component
+"use client"
 
-import React from 'react';
+import { Button } from "@/components/ui/button"
+import { Github, Heart, Linkedin, Mail, Phone } from "lucide-react"
+import Link from "next/link"
 
-const Footer: React.FC = () => {
+export default function Footer() {
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer className="bg-gray-800 text-gray-200 py-6">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-sm opacity-80">
-            © {new Date().getFullYear()} Wisdom Dzontoh. All rights reserved.
-          </p>
-          <div className="flex space-x-4">
-            <a
-              href="https://github.com/wisdomdzontoh"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="transition-transform transform hover:scale-110"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+    <footer className="bg-card border-t border-border">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-2">
+            <Link href="/" className="text-2xl font-bold text-primary mb-4 inline-block">
+              Wisdom Dzontoh
+            </Link>
+            <p className="text-muted-foreground mb-4 max-w-md">
+              Software engineer and health informatician specializing in building innovative solutions that bridge
+              technology and healthcare.
+            </p>
+            <div className="flex space-x-4">
+              <a
+                href="https://github.com/wisdomdzontoh"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-              </svg>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/wisdom-dzontoh-563430195"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="transition-transform transform hover:scale-110"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                <Github size={20} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/wisdom-dzontoh-563430195"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                <rect x="2" y="9" width="4" height="12"></rect>
-                <circle cx="4" cy="4" r="2"></circle>
-              </svg>
-            </a>
-            <a
-              href="mailto:wisdomdzontoh@gmail.com"
-              aria-label="Email"
-              className="transition-transform transform hover:scale-110"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                <Linkedin size={20} />
+              </a>
+              <a
+                href="mailto:wisdomdzontoh@gmail.com"
+                aria-label="Email"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-            </a>
-            <a
-              href="https://wa.me/+233558749735"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              className="transition-transform transform hover:scale-110"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                <Mail size={20} />
+              </a>
+              <a
+                href="tel:+233558749735"
+                aria-label="Phone"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-              </svg>
-            </a>
+                <Phone size={20} />
+              </a>
+            </div>
           </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="#about" className="text-muted-foreground hover:text-primary transition-colors">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="#projects" className="text-muted-foreground hover:text-primary transition-colors">
+                  Projects
+                </Link>
+              </li>
+              <li>
+                <Link href="#skills" className="text-muted-foreground hover:text-primary transition-colors">
+                  Skills
+                </Link>
+              </li>
+              <li>
+                <Link href="#experience" className="text-muted-foreground hover:text-primary transition-colors">
+                  Experience
+                </Link>
+              </li>
+              <li>
+                <Link href="#contact" className="text-muted-foreground hover:text-primary transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Contact</h3>
+            <ul className="space-y-2">
+              <li className="flex items-center text-muted-foreground">
+                <Mail className="mr-2" size={16} />
+                <a href="mailto:wisdomdzontoh@gmail.com" className="hover:text-primary transition-colors">
+                  wisdomdzontoh@gmail.com
+                </a>
+              </li>
+              <li className="flex items-center text-muted-foreground">
+                <Phone className="mr-2" size={16} />
+                <a href="tel:+233558749735" className="hover:text-primary transition-colors">
+                  +233 558 749 735
+                </a>
+              </li>
+            </ul>
+
+            <div className="mt-4">
+              <Button asChild variant="outline" size="sm">
+                <a href="#contact">Get In Touch</a>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-muted-foreground">© {currentYear} Wisdom Dzontoh. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground flex items-center mt-4 md:mt-0">
+            Built with <Heart className="mx-1 text-primary" size={14} /> using Next.js and Tailwind CSS
+          </p>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;

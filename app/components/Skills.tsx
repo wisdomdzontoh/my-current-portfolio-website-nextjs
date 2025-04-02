@@ -1,193 +1,95 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
+import { useScrollAnimation } from "@/app/hooks/use-scroll-animation"
+import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 
 type Skill = {
-  name: string;
-  level: string;
-};
+  name: string
+  level: "Beginner" | "Intermediate" | "Advanced"
+  percentage: number
+}
 
-const skills: { category: string; items: Skill[] }[] = [
+const skillCategories = [
   {
-    category: 'Programming Languages',
+    category: "Programming Languages",
     items: [
-      { name: 'Python', level: 'Advanced' },
-      { name: 'JavaScript', level: 'Intermediate' },
-      { name: 'C++', level: 'Intermediate' },
-      { name: 'JAVA', level: 'Intermediate' },
+      { name: "Python", level: "Advanced", percentage: 90 },
+      { name: "JavaScript", level: "Intermediate", percentage: 75 },
+      { name: "C++", level: "Intermediate", percentage: 70 },
+      { name: "JAVA", level: "Intermediate", percentage: 65 },
     ],
   },
   {
-    category: 'Web Development',
+    category: "Web Development",
     items: [
-      { name: 'Django', level: 'Advanced' },
-      { name: 'React', level: 'Intermediate' },
-      { name: 'Next.js', level: 'Intermediate' },
-      { name: 'Tailwind CSS', level: 'Intermediate' },
+      { name: "Django", level: "Advanced", percentage: 90 },
+      { name: "React", level: "Intermediate", percentage: 75 },
+      { name: "Next.js", level: "Intermediate", percentage: 70 },
+      { name: "Tailwind CSS", level: "Intermediate", percentage: 80 },
     ],
   },
   {
-    category: 'Database & DevOps',
+    category: "Database & DevOps",
     items: [
-      { name: 'PostgreSQL', level: 'Intermediate' },
-      { name: 'MySQL', level: 'Intermediate' },
-      { name: 'MongoDB', level: 'Intermediate' },
-      { name: 'AWS', level: 'Intermediate' },
-      { name: 'Git', level: 'Intermediate' },
-      { name: 'Docker', level: 'Intermediate' },
+      { name: "PostgreSQL", level: "Intermediate", percentage: 75 },
+      { name: "MySQL", level: "Intermediate", percentage: 70 },
+      { name: "MongoDB", level: "Intermediate", percentage: 65 },
+      { name: "AWS", level: "Intermediate", percentage: 60 },
+      { name: "Git", level: "Intermediate", percentage: 80 },
+      { name: "Docker", level: "Intermediate", percentage: 65 },
     ],
   },
-];
+]
 
 export default function Skills() {
-  const [isVisible, setIsVisible] = useState(false)
+  const { ref, isVisible } = useScrollAnimation()
+  const [animateSkills, setAnimateSkills] = useState(false)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
-        }
-      },
-      { threshold: 0.1 }
-    )
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setAnimateSkills(true)
+      }, 300)
 
-    const section = document.getElementById('skills')
-    if (section) observer.observe(section)
-
-    return () => {
-      if (section) observer.unobserve(section)
+      return () => clearTimeout(timer)
     }
-  }, [])
+  }, [isVisible])
 
   return (
-    <section id="skills" className={`skills ${isVisible ? 'visible' : ''}`}>
+    <section id="skills" className="section-container bg-background/50">
       <div className="container">
         <h2 className="section-title">Skills</h2>
-        <div className="skills-grid">
-          {skills.map((category, catIndex) => (
-            <div key={catIndex} className="skill-category">
-              <h3 className="category-title">{category.category}</h3>
-              <div className="skill-list">
-                {category.items.map((skill, index) => (
-                  <div key={index} className="skill-item">
-                    <h4 className="skill-name">{skill.name}</h4>
-                    <div className="skill-bar-container">
-                      <div 
-                        className="skill-bar" 
-                        style={{
-                          width: skill.level === 'Advanced' ? '100%' : skill.level === 'Intermediate' ? '75%' : '50%'
-                        }}
-                      ></div>
+
+        <div ref={ref} className={cn("animate-on-scroll", isVisible && "visible")}>
+          <div className="grid md:grid-cols-3 gap-8">
+            {skillCategories.map((category, catIndex) => (
+              <div key={catIndex} className="bg-card rounded-lg p-6 shadow-lg">
+                <h3 className="text-xl font-semibold mb-6 text-primary">{category.category}</h3>
+                <div className="space-y-6">
+                  {category.items.map((skill, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-medium">{skill.name}</h4>
+                        <span className="text-sm text-muted-foreground">{skill.level}</span>
+                      </div>
+                      <div className="skill-bar">
+                        <div
+                          className="skill-progress"
+                          style={{
+                            width: animateSkills ? `${skill.percentage}%` : "0%",
+                          }}
+                        />
+                      </div>
                     </div>
-                    <span className="skill-level">{skill.level}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .skills {
-          --primary-color: #61dafb;
-          --secondary-color: #4ade80;
-          --text-color: #e2e8f0;
-          --background-color: #1a202c;
-          --card-background: #2d3748;
-          --skill-bar-bg: #4a5568;
-          --skill-bar-fill: #61dafb;
-          padding: 4rem 0;
-          background-color: var(--background-color);
-          color: var(--text-color);
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .skills.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 1rem;
-        }
-
-        .section-title {
-          font-size: 2.5rem;
-          color: var(--primary-color);
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-
-        .skills-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-        }
-
-        .skill-category {
-          background-color: var(--card-background);
-          border-radius: 8px;
-          padding: 1.5rem;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .category-title {
-          font-size: 1.5rem;
-          color: var(--secondary-color);
-          margin-bottom: 1rem;
-        }
-
-        .skill-list {
-          display: grid;
-          gap: 1rem;
-        }
-
-        .skill-item {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 0.5rem;
-          align-items: center;
-        }
-
-        .skill-name {
-          font-size: 1rem;
-          font-weight: 500;
-        }
-
-        .skill-bar-container {
-          grid-column: 1 / -1;
-          height: 8px;
-          background-color: var(--skill-bar-bg);
-          border-radius: 4px;
-          overflow: hidden;
-        }
-
-        .skill-bar {
-          height: 100%;
-          background-color: var(--skill-bar-fill);
-          border-radius: 4px;
-          transition: width 0.5s ease;
-        }
-
-        .skill-level {
-          font-size: 0.875rem;
-          color: var(--text-color);
-          opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-          .skills-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
     </section>
   )
 }
+

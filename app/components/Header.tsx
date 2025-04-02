@@ -1,98 +1,93 @@
-'use client'
+"use client"
 
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { Button } from '../components/ui/Button';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Menu, X } from "lucide-react"
+import { cn } from "@/lib/utils"
+
+const navItems = [
+  { name: "About", href: "#about" },
+  { name: "Skills", href: "#skills" },
+  { name: "Experience", href: "#experience" },
+  { name: "Projects", href: "#projects" },
+  { name: "Testimonials", href: "#testimonials" },
+  { name: "Contact", href: "#contact" },
+]
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState("")
+  const [scrolled, setScrolled] = useState(false)
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   const handleScroll = () => {
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
-        setActiveSection(section.id);
+    const scrollPosition = window.scrollY
+
+    if (scrollPosition > 10) {
+      setScrolled(true)
+    } else {
+      setScrolled(false)
+    }
+
+    const sections = document.querySelectorAll("section[id]")
+    sections.forEach((section) => {
+      const sectionTop = (section as HTMLElement).offsetTop - 100
+      const sectionHeight = (section as HTMLElement).offsetHeight
+      const sectionId = section.getAttribute("id") || ""
+
+      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        setActiveSection(sectionId)
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   return (
-    <header className="bg-gray-900 text-white sticky top-0 z-50 border-b border-gray-700">
+    <header
+      className={cn(
+        "fixed top-0 w-full z-50 transition-all duration-300",
+        scrolled ? "bg-background/90 backdrop-blur-md shadow-md py-3" : "bg-transparent py-5",
+      )}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-xl font-bold text-blue-400">
-              Wisdom Dzontoh Portfolio
-            </Link>
-          </div>
+        <div className="flex items-center justify-between">
+          <Link href="/" className="text-xl font-bold text-primary">
+            Wisdom Dzontoh
+          </Link>
+
           <nav className="hidden md:block">
-            <ul className="flex space-x-6">
-              <li>
-                <Link 
-                  href="#about" 
-                  className={`hover:text-blue-400 transition-colors ${activeSection === 'about' ? 'text-blue-400' : 'text-gray-300'}`}
-                >
-                  About Me
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="#projects" 
-                  className={`hover:text-blue-400 transition-colors ${activeSection === 'projects' ? 'text-blue-400' : 'text-gray-300'}`}
-                >
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="#contact" 
-                  className={`hover:text-blue-400 transition-colors ${activeSection === 'contact' ? 'text-blue-400' : 'text-gray-300'}`}
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-              <Link 
-                  href="#experience" 
-                  className={`hover:text-blue-400 transition-colors ${activeSection === 'experience' ? 'text-blue-400' : 'text-gray-300'}`}
-                >
-                  Experience
-                </Link>
+            <ul className="flex space-x-8">
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "text-sm font-medium transition-colors hover:text-primary relative py-2",
+                      activeSection === item.href.substring(1) ? "text-primary" : "text-muted-foreground",
+                    )}
+                  >
+                    {item.name}
+                    {activeSection === item.href.substring(1) && (
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+                    )}
+                  </Link>
                 </li>
-                <li>
-              <Link 
-                  href="#skills" 
-                  className={`hover:text-blue-400 transition-colors ${activeSection === 'skills' ? 'text-blue-400' : 'text-gray-300'}`}
-                >
-                  Skills
-                </Link>
-                </li>
-                <li>
-              <Link 
-                  href="#testimonials" 
-                  className={`hover:text-blue-400 transition-colors ${activeSection === 'testimonials' ? 'text-blue-400' : 'text-gray-300'}`}
-                >
-                  Testimonials
-                </Link>
-                </li>
+              ))}
             </ul>
           </nav>
+
           <div className="md:hidden">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleMenu} 
-              aria-label="Toggle menu" 
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMenu}
+              aria-label="Toggle menu"
               aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -100,66 +95,30 @@ export default function Header() {
           </div>
         </div>
       </div>
+
       {isMenuOpen && (
-        <nav className="md:hidden bg-gray-800 border-t border-gray-700">
-          <ul className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <li>
-              <Link
-                href="#about"
-                className={`block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white transition-colors ${activeSection === 'about' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
-                onClick={toggleMenu}
-              >
-                About Me
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#projects"
-                className={`block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white transition-colors ${activeSection === 'projects' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
-                onClick={toggleMenu}
-              >
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#contact"
-                className={`block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white transition-colors ${activeSection === 'contact' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
-                onClick={toggleMenu}
-              >
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#experience"
-                className={`block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white transition-colors ${activeSection === 'experience' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
-                onClick={toggleMenu}
-              >
-                Experience
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#skills"
-                className={`block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white transition-colors ${activeSection === 'skills' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
-                onClick={toggleMenu}
-              >
-                Skills
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#testimonials"
-                className={`block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white transition-colors ${activeSection === 'testimonials' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
-                onClick={toggleMenu}
-              >
-                Testimonials
-              </Link>
-            </li>
+        <nav className="md:hidden bg-card/95 backdrop-blur-md border-t border-border">
+          <ul className="px-4 py-3 space-y-3">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "block px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    activeSection === item.href.substring(1)
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  )}
+                  onClick={toggleMenu}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       )}
     </header>
-  );
+  )
 }
+

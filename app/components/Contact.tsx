@@ -1,118 +1,201 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
+import type React from "react"
+
+import { useScrollAnimation } from "@/app/hooks/use-scroll-animation"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Github, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react"
+import { useState } from "react"
 
 export default function Contact() {
-  const [isVisible, setIsVisible] = useState(false)
+  const { ref, isVisible } = useScrollAnimation()
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
-        }
-      },
-      { threshold: 0.1 }
-    )
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormState((prev) => ({ ...prev, [name]: value }))
+  }
 
-    const section = document.getElementById('contact')
-    if (section) observer.observe(section)
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
 
-    return () => {
-      if (section) observer.unobserve(section)
-    }
-  }, [])
+    // Simulate form submission
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setIsSubmitted(true)
+      setFormState({ name: "", email: "", message: "" })
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setIsSubmitted(false)
+      }, 5000)
+    }, 1500)
+  }
 
   return (
-    <section id="contact" className={`contact ${isVisible ? 'visible' : ''}`}>
+    <section id="contact" className="section-container bg-background/50">
       <div className="container">
-        <h2 className="section-title">Contact</h2>
-        <p className="contact-description">
-          Feel free to reach out if you would like to discuss opportunities or have any questions!
-        </p>
-        <a href="mailto:wisdomdzontoh@gmail.com" className="contact-button">
-          Email Me
-        </a>
+        <h2 className="section-title">Get In Touch</h2>
+
+        <div ref={ref} className={cn("animate-on-scroll", isVisible && "visible")}>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="bg-card border-border/50 shadow-lg overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-2xl text-primary">Contact Information</CardTitle>
+                <CardDescription>Feel free to reach out through any of these channels</CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-6">
+                <div className="flex items-start">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0">
+                    <Mail className="text-primary" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Email</h3>
+                    <a
+                      href="mailto:wisdomdzontoh@gmail.com"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      wisdomdzontoh@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0">
+                    <Phone className="text-primary" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Phone</h3>
+                    <a href="tel:+233558749735" className="text-muted-foreground hover:text-primary transition-colors">
+                      +233 558 749 735
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0">
+                    <MapPin className="text-primary" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Location</h3>
+                    <p className="text-muted-foreground">Accra, Ghana</p>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-border">
+                  <h3 className="font-medium mb-4">Connect with me</h3>
+                  <div className="flex gap-4">
+                    <a
+                      href="https://github.com/wisdomdzontoh"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                      aria-label="GitHub"
+                    >
+                      <Github size={20} />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/wisdom-dzontoh-563430195"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin size={20} />
+                    </a>
+                    <a
+                      href="mailto:wisdomdzontoh@gmail.com"
+                      className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                      aria-label="Email"
+                    >
+                      <Mail size={20} />
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card border-border/50 shadow-lg overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-2xl text-primary">Send a Message</CardTitle>
+                <CardDescription>I'll get back to you as soon as possible</CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                {isSubmitted ? (
+                  <div className="bg-primary/10 text-primary p-4 rounded-lg flex items-center">
+                    <Send className="mr-2" size={20} />
+                    <p>Thank you for your message! I'll respond shortly.</p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Name
+                      </label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formState.name}
+                        onChange={handleChange}
+                        placeholder="Your name"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formState.email}
+                        onChange={handleChange}
+                        placeholder="Your email address"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-sm font-medium">
+                        Message
+                      </label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={formState.message}
+                        onChange={handleChange}
+                        placeholder="Your message"
+                        rows={5}
+                        required
+                      />
+                    </div>
+
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </Button>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
-
-      <style jsx>{`
-        .contact {
-          --primary-color: #61dafb;
-          --secondary-color: #4ade80;
-          --text-color: #e2e8f0;
-          --background-color: #1a202c;
-          --card-background: #2d3748;
-          padding: 6rem 0;
-          background-color: var(--background-color);
-          color: var(--text-color);
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .contact.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .container {
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 0 1rem;
-          text-align: center;
-        }
-
-        .section-title {
-          font-size: 2.5rem;
-          color: var(--primary-color);
-          margin-bottom: 1.5rem;
-        }
-
-        .contact-description {
-          font-size: 1.2rem;
-          line-height: 1.6;
-          margin-bottom: 2.5rem;
-        }
-
-        .contact-button {
-          display: inline-block;
-          background-color: var(--primary-color);
-          color: var(--background-color);
-          font-size: 1.1rem;
-          font-weight: 600;
-          padding: 1rem 2rem;
-          border-radius: 50px;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-button:hover {
-          background-color: var(--secondary-color);
-          transform: translateY(-3px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        @media (max-width: 768px) {
-          .contact {
-            padding: 4rem 0;
-          }
-
-          .section-title {
-            font-size: 2rem;
-          }
-
-          .contact-description {
-            font-size: 1rem;
-          }
-
-          .contact-button {
-            font-size: 1rem;
-            padding: 0.8rem 1.6rem;
-          }
-        }
-      `}</style>
     </section>
   )
 }
+
